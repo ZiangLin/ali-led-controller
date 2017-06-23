@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ALI wear</string>
+    <string name="btn_toast">back</string>
+    <string name="title_activity_mode">ModeActivity</string>
+    <string name="welcome_label">Welcome</string>
+
+</resources>
