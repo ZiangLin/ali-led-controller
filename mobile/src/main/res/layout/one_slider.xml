@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/brightnessLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_weight="2">
+
+
+    <ui.LightnessSlider
+        android:id="@+id/brightnessSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true" />
+
+    <Button
+        android:id="@+id/watchForWhiteOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/brightnessSlider"
+        android:layout_centerInParent="true"
+        android:text="android wear off"
+        android:textSize="18dp" />
+
+
+</RelativeLayout>
