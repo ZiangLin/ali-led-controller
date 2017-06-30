@@ -16,6 +16,7 @@
     <include layout="@layout/welcome"></include>
     <include layout="@layout/rgb"></include>
     <include layout="@layout/one_slider"></include>
+    <include layout="@layout/two_slider_eight_button"></include>
 
 
     <RelativeLayout

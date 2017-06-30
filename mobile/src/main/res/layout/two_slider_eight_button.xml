@@ -52,21 +52,25 @@
             android:orientation="horizontal">
 
             <Switch
+                android:id="@+id/reading0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />
 
             <Switch
+                android:id="@+id/reading1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />
 
             <Switch
+                android:id="@+id/reading2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />
 
             <Switch
+                android:id="@+id/reading3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />
@@ -81,21 +85,25 @@
             android:orientation="horizontal">
 
             <Switch
+                android:id="@+id/reading4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />
 
             <Switch
+                android:id="@+id/reading5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />
 
             <Switch
+                android:id="@+id/reading6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />
 
             <Switch
+                android:id="@+id/reading7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp" />

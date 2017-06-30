@@ -111,10 +111,13 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                             welcomeLayout.setVisibility(LinearLayout.GONE);
                             rgbLayout.setVisibility(LinearLayout.VISIBLE);
                             MobileWearableService.getInstance().sendMessage("rgb");
-                        } else {//it is white only lamp
+                        } else if(mDevice.getName().substring(3,mDevice.getName().length()).equals("PC12")) {//it is white only lamp
                             welcomeLayout.setVisibility(LinearLayout.GONE);
                             brightnessLayout.setVisibility(LinearLayout.VISIBLE);
                             MobileWearableService.getInstance().sendMessage("white");
+                        } else{//upwash,downwash,readings
+                            welcomeLayout.setVisibility(LinearLayout.GONE);
+                            twoWhiteLayout.setVisibility(LinearLayout.VISIBLE);
                         }
 //                         seekBar1.setEnabled(true);
 //                         seekBar2.setEnabled(true);
@@ -143,6 +146,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         welcomeLayout.setVisibility(LinearLayout.VISIBLE);
                         rgbLayout.setVisibility(LinearLayout.GONE);
                         brightnessLayout.setVisibility(LinearLayout.GONE);
+                        twoWhiteLayout.setVisibility(LinearLayout.GONE);
 
                         ((TextView) findViewById(R.id.deviceName)).setText("Not Connected");
                         listAdapter.add("[" + currentDateTimeString + "] Disconnected to: " + mDevice.getName());
@@ -191,6 +195,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private LinearLayout rgbLayout;
     private LinearLayout welcomeLayout;
     private RelativeLayout brightnessLayout;
+    private RelativeLayout twoWhiteLayout;
     private LightnessSlider brightnessSlider;
     private SeekBar seekBarColorSpeed;
     private SeekBar seekBarWhite;
@@ -265,8 +270,10 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         rgbLayout = (LinearLayout) findViewById(R.id.rgbLayout);
         welcomeLayout = (LinearLayout) findViewById(R.id.welcomeLayout);
         brightnessLayout = (RelativeLayout) findViewById(R.id.brightnessLayout);
+        twoWhiteLayout = (RelativeLayout) findViewById(R.id.twoWhiteLayout);
         rgbLayout.setVisibility(LinearLayout.GONE);
         brightnessLayout.setVisibility(LinearLayout.GONE);
+        twoWhiteLayout.setVisibility(LinearLayout.GONE);
 
         //create Lightness slider and register listener to it
         brightnessSlider = (LightnessSlider) findViewById(R.id.brightnessSlider);
@@ -278,6 +285,9 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
 
         service_init();
+
+        //init the control for two white panel
+        TwoWhiteActivity ac = new TwoWhiteActivity();
 
 
         // Handler Disconnect & Connect button
@@ -321,8 +331,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 // to increase reaction speed
                 if (count == 0) {
                     if (whiteOn == false && colorShowOn == false && androidWearOnRGB == false) {
-                        if (mState == UART_PROFILE_CONNECTED)
-                            mService.writeRXCharacteristic(value);
+                        sendValue(value);
                     } else if (whiteOn == true) {//cancel the old toast if exist and show a new toast
                         handleToast("Turn the white off to change color");
                     } else if (colorShowOn == true) {
@@ -401,8 +410,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     value[2] = (byte) Color.blue(color);
                     value[3] = 0;
                     if (whiteOn == false && colorShowOn == false && androidWearOnRGB == false) {
-                        if (mState == UART_PROFILE_CONNECTED)
-                            mService.writeRXCharacteristic(value);
+                        sendValue(value);
 
                     } else if (whiteOn == true) {//cancel the old toast if exist and show a new toast
                         handleToast("Turn the white off to change color");
@@ -439,8 +447,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     value[2] = (byte) Color.blue(color);
                     value[3] = 0;
                     if (whiteOn == false && colorShowOn == false && androidWearOnRGB == false) {
-                        if (mState == UART_PROFILE_CONNECTED)
-                            mService.writeRXCharacteristic(value);
+                        sendValue(value);
                     } else if (whiteOn == true) {//cancel the old toast if exist and show a new toast
                         handleToast("Turn the white off to change color");
                     } else if (colorShowOn == true) {
@@ -475,8 +482,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     value[2] = (byte) Color.blue(color);
                     value[3] = 0;
                     if (whiteOn == false && colorShowOn == false && androidWearOnRGB == false) {
-                        if (mState == UART_PROFILE_CONNECTED)
-                            mService.writeRXCharacteristic(value);
+                        sendValue(value);
                     } else if (whiteOn == true) {//cancel the old toast if exist and show a new toast
                         handleToast("Turn the white off to change color");
                     } else if (colorShowOn == true) {
@@ -511,8 +517,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     value[2] = (byte) Color.blue(color);
                     value[3] = 0;
                     if (whiteOn == false && colorShowOn == false && androidWearOnRGB == false) {
-                        if (mState == UART_PROFILE_CONNECTED)
-                            mService.writeRXCharacteristic(value);
+                        sendValue(value);
                     } else if (whiteOn == true) {//cancel the old toast if exist and show a new toast
                         handleToast("Turn the white off to change color");
                     } else if (colorShowOn == true) {
@@ -637,8 +642,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                 stopColorShow.setVisibility(View.VISIBLE);
                 updateState("show");
                 value[3] = (byte) (100 - seekBarColorSpeed.getProgress());
-                if (mState == UART_PROFILE_CONNECTED)
-                    mService.writeRXCharacteristic(value);
+                sendValue(value);
             }
         });
         //White color control
@@ -652,9 +656,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                     value[1] = (byte) (progress);
                     value[2] = (byte) (progress);
                     value[3] = 0;
-                    if (mState == UART_PROFILE_CONNECTED) {
-                        mService.writeRXCharacteristic(value);
-                    }
+                    sendValue(value);
                     count++;
                 } else if (count == 1) {
                     count = 0;
@@ -678,8 +680,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             @Override
             public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
                 value[3] = (byte) (100 - progressValue);
-                if (mState == UART_PROFILE_CONNECTED)
-                    mService.writeRXCharacteristic(value);
+                sendValue(value);
                 //toast disappear
                 if (address != null) {
                     address.cancel();
@@ -702,12 +703,16 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 
     }
 
+    public void sendValue(byte[] value) {
+        if (mState == UART_PROFILE_CONNECTED)
+            mService.writeRXCharacteristic(value);
+    }
+
     private void showColor(int r, int g, int b) {
         value[0] = (byte) r;
         value[1] = (byte) g;
         value[2] = (byte) b;
-        if (mState == UART_PROFILE_CONNECTED)
-            mService.writeRXCharacteristic(value);
+        sendValue(value);
     }
 
     private void updateState(String state) {
@@ -728,8 +733,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             value[1] = (byte) Color.green(color);
             value[2] = (byte) Color.blue(color);
             value[3] = 0;
-            if (mState == UART_PROFILE_CONNECTED)
-                mService.writeRXCharacteristic(value);
+            sendValue(value);
             //normal mode can turn on either color show or white
             colorShow.setEnabled(true);
             white.setEnabled(true);
@@ -740,8 +744,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             value[2] = (byte) seekBarWhite.getProgress();
             value[3] = 0;
 
-            if (mState == UART_PROFILE_CONNECTED)
-                mService.writeRXCharacteristic(value);
+            sendValue(value);
             //cannnot start color show
             colorShow.setEnabled(false);
             androidWearRGB.setEnabled(false);
