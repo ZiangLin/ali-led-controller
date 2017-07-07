@@ -78,9 +78,18 @@ public class LightnessSlider extends AbsCustomSlider {
         return Color.red(color);
     }
 
+    public static float lightnessAtBrightness(int brightness){
+        return brightness/255f;
+    }
+
     public static float lightnessOfColor(int color) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         return hsv[2];
+    }
+
+    public void setValue(int brightness){
+        this.value = lightnessAtBrightness(brightness);
+        invalidate();
     }
 }

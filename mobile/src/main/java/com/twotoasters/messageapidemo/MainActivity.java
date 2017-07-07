@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                             MobileWearableService.getInstance().sendMessage("white");
                         } else{//upwash,downwash,readings
                             welcomeLayout.setVisibility(LinearLayout.GONE);
-                            twoWhiteLayout.setVisibility(LinearLayout.VISIBLE);
+                            twoWhiteActivity.setVisibility(LinearLayout.VISIBLE);
                         }
 //                         seekBar1.setEnabled(true);
 //                         seekBar2.setEnabled(true);
@@ -146,7 +146,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
                         welcomeLayout.setVisibility(LinearLayout.VISIBLE);
                         rgbLayout.setVisibility(LinearLayout.GONE);
                         brightnessLayout.setVisibility(LinearLayout.GONE);
-                        twoWhiteLayout.setVisibility(LinearLayout.GONE);
+                        twoWhiteActivity.setVisibility(LinearLayout.GONE);
 
                         ((TextView) findViewById(R.id.deviceName)).setText("Not Connected");
                         listAdapter.add("[" + currentDateTimeString + "] Disconnected to: " + mDevice.getName());
@@ -166,15 +166,15 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
             }
             //*********************//
             if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
-
                 final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
                 runOnUiThread(new Runnable() {
                     public void run() {
                         try {
-                            String text = new String(txValue, "UTF-8");
-                            String currentDateTimeString = DateFormat.getTimeInstance().format(new Date());
-                            listAdapter.add("[" + currentDateTimeString + "] RX: " + text);
-                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+//                            String text = new String(txValue, "UTF-8");
+//                            String currentDateTimeSt  ring = DateFormat.getTimeInstance().format(new Date());
+//                            listAdapter.add("[" + currentDateTimeString + "] RX: " + text);
+//                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
+                            twoWhiteActivity.setValues(((int)txValue[0])&0xff,((int)txValue[1])&0xff,((int)txValue[2])&0xff);
 
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
@@ -195,7 +195,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
     private LinearLayout rgbLayout;
     private LinearLayout welcomeLayout;
     private RelativeLayout brightnessLayout;
-    private RelativeLayout twoWhiteLayout;
+    private TwoWhiteActivity twoWhiteActivity;
     private LightnessSlider brightnessSlider;
     private SeekBar seekBarColorSpeed;
     private SeekBar seekBarWhite;
@@ -270,10 +270,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         rgbLayout = (LinearLayout) findViewById(R.id.rgbLayout);
         welcomeLayout = (LinearLayout) findViewById(R.id.welcomeLayout);
         brightnessLayout = (RelativeLayout) findViewById(R.id.brightnessLayout);
-        twoWhiteLayout = (RelativeLayout) findViewById(R.id.twoWhiteLayout);
         rgbLayout.setVisibility(LinearLayout.GONE);
         brightnessLayout.setVisibility(LinearLayout.GONE);
-        twoWhiteLayout.setVisibility(LinearLayout.GONE);
 
         //create Lightness slider and register listener to it
         brightnessSlider = (LightnessSlider) findViewById(R.id.brightnessSlider);
@@ -287,7 +285,8 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         service_init();
 
         //init the control for two white panel
-        TwoWhiteActivity ac = new TwoWhiteActivity();
+        twoWhiteActivity = new TwoWhiteActivity();
+        twoWhiteActivity.setVisibility(View.GONE);
 
 
         // Handler Disconnect & Connect button

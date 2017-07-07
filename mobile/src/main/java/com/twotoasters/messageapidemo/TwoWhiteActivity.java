@@ -1,5 +1,6 @@
 package com.twotoasters.messageapidemo;
 
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -60,6 +61,18 @@ public class TwoWhiteActivity {
                       MainActivity.getInstance().sendValue(values);
                 }
             });
+        }
+    }
+    public void setVisibility(int visibility){
+        twoWhiteLayout.setVisibility(visibility);
+    }
+
+    public void setValues(int up, int down, int readings){
+        upwashSlider.setValue(up);
+        downwashSlider.setValue(down);
+        for(int i=7;i>=0;i--){
+            readingSwiched[i].setChecked(readings%2==1);
+            readings/=2;
         }
     }
 }
