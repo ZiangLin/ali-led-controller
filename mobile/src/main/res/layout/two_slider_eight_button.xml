@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:layout_weight="2">
 
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,8 +17,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:text="Bluetooth Enabled"
+            android:textSize="20dp"/>
+
+        <Switch
+            android:id="@+id/bluetoothEnabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="Upwash"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginTop="50dp"/>
 
         <ui.LightnessSlider
             android:id="@+id/upwashSlider"

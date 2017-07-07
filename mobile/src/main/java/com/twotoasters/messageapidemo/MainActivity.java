@@ -174,7 +174,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
 //                            String currentDateTimeSt  ring = DateFormat.getTimeInstance().format(new Date());
 //                            listAdapter.add("[" + currentDateTimeString + "] RX: " + text);
 //                            messageListView.smoothScrollToPosition(listAdapter.getCount() - 1);
-                            twoWhiteActivity.setValues(((int)txValue[0])&0xff,((int)txValue[1])&0xff,((int)txValue[2])&0xff);
+                            twoWhiteActivity.setValues(((int)txValue[0])&0xff,((int)txValue[1])&0xff,((int)txValue[2])&0xff,((int)txValue[3])&0xff);
 
                         } catch (Exception e) {
                             Log.e(TAG, e.toString());
@@ -901,7 +901,7 @@ public class MainActivity extends Activity implements RadioGroup.OnCheckedChange
         }
     }
 
-    private void handleToast(String message) {
+    public void handleToast(String message) {
         if (address != null) {
             address.cancel();
             address = null;
