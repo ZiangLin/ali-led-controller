@@ -1,6 +1,7 @@
 package com.twotoasters.messageapidemo;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -17,6 +18,8 @@ public class TwoWhiteActivity {
     private RelativeLayout twoWhiteLayout;
     private LightnessSlider upwashSlider;
     private LightnessSlider downwashSlider;
+    private Button allOnBtn;
+    private Button allOffBtn;
     private Switch[] readingSwiched = new Switch[8];
     public TwoWhiteActivity(){
         twoWhiteLayout = (RelativeLayout) MainActivity.getInstance().findViewById(R.id.twoWhiteLayout);
@@ -44,9 +47,9 @@ public class TwoWhiteActivity {
         for(int i=0;i<8;i++){
             int temp = MainActivity.getInstance().getResources().getIdentifier("reading"+i, "id", MainActivity.getInstance().getPackageName());
             readingSwiched[i] = (Switch)MainActivity.getInstance().findViewById(temp);
-            readingSwiched[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            readingSwiched[i].setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                public void onClick(View v) {
                     byte[] values = new byte[4];
                     int value = 0;
                     for(int i=0;i<8;i++){
@@ -58,10 +61,36 @@ public class TwoWhiteActivity {
                     value/=2;
                     values[2]= (byte)value;
                     values[3]=(byte)2;
-                      MainActivity.getInstance().sendValue(values);
+                    MainActivity.getInstance().sendValue(values);
                 }
             });
         }
+        allOnBtn = (Button)MainActivity.getInstance().findViewById(R.id.allon);
+        allOnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i=0;i<8;i++){
+                    readingSwiched[i].setChecked(true);
+                }
+                byte[] values = new byte[4];
+                values[2] = (byte)255;
+                values[3]=(byte)2;
+                MainActivity.getInstance().sendValue(values);
+            }
+        });
+        allOffBtn = (Button)MainActivity.getInstance().findViewById(R.id.alloff);
+        allOffBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i=0;i<8;i++){
+                    readingSwiched[i].setChecked(false);
+                }
+                byte[] values = new byte[4];
+                values[2] = (byte)0;
+                values[3]=(byte)2;
+                MainActivity.getInstance().sendValue(values);
+            }
+        });
     }
     public void setVisibility(int visibility){
         twoWhiteLayout.setVisibility(visibility);
